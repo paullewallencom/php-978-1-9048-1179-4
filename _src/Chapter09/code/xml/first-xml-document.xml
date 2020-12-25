@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<labels>
+  <label name="Sun Records">
+    <artists>
+      <artist id="1">
+        <name>Elvis Presley</name>
+        <records>
+          <record id="SUN 209" released="July 19, 1954">
+            <name>
+              That&apos;s All Right (Mama) &amp; Blue Moon Of Kentucky
+            </name>
+          </record>
+          <record id="SUN 210" released="September, 1954">
+            <name>
+              Good Rockin&apos; Tonight
+            </name>
+          </record>
+        </records>
+      </artist>
+
+      <artist id="2">
+        <name>Carl Perkins</name>
+        <records>
+          <record id="SUN 224" released="October 22, 1955">
+            <name>
+              Gone, Gone, Gone
+            </name>
+          </record>
+        </records>
+      </artist>
+    </artists>
+  </label>
+</labels>

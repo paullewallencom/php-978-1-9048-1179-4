@@ -1,0 +1,9 @@
+<holiday>
+  <internal-name>jesusCircumcision</internal-name>
+  <translation>Circoncision de Jésus</translation>
+
+  <properties>
+    <property id="type">static</property>
+    <property id="since">4th century</property>
+  </properties>
+</holiday>

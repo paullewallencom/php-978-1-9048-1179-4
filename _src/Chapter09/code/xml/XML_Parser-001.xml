@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration>
+    <section name="paths">
+        <includes>/usr/share/php/myapp</includes>
+        <cache>/tmp/myapp</cache>
+        <templates>/var/www/skins/myapp</templates>
+    </section>
+    <section name="db" environment="online">
+        <dsn>mysql://user:pass@localhost/myapp</dsn>
+        <prefix>myapp_</prefix>
+    </section>    
+    <section name="db" environment="stage">
+        <dsn>mysql://root:@localhost/myapp</dsn>
+        <prefix>myapp_testing_</prefix>
+    </section>    
+</configuration>

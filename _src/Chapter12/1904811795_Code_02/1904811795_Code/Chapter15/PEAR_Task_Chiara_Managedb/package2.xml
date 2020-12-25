@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.4.3" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.0     http://pear.php.net/dtd/package-2.0.xsd">
+ <name>PEAR_Task_Chiara_Managedb</name>
+ <channel>pear.chiaraquartet.net</channel>
+ <summary>Provides the &lt;tasks:chiara_managedb/&gt; file task for managing databases on installation</summary>
+ <description>Task_Chiara_Managedb provides the code to implement the
+&lt;tasks:chiara_managedb/&gt; task, as well as a post-installation script
+to manage the configuration variables it needs.
+
+This task works in conjunction with the chiaramdb2schema file role
+(package PEAR_Installer_Role_Chiaramdb2schema) to create databases used by
+a package on installation, and to upgrade the database structure
+automatically on upgrade.  To do this, it uses MDB2_Schema&apos;s
+updateDatabase() functionality.
+
+The post-install script must be run with &quot;pear run-scripts&quot;
+to initialize configuration variables</description>
+ <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <lead>
+  <name>Greg Beaver</name>
+  <user>cellog</user>
+  <email>cellog@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2005-10-30</date>
+ <time>01:34:12</time>
+ <version>
+  <release>0.1.0</release>
+  <api>0.1.0</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>beta</api>
+ </stability>
+ <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD license</license>
+ <notes>initial release</notes>
+ <contents>
+  <dir baseinstalldir="PEAR/Task/Chiara" name="/">
+   <dir name="Managedb">
+    <file name="rw.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+   </dir> <!-- //Managedb -->
+   <file name="Managedb.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file name="PEAR_Task_Chiara_Managedb-0.1.0.tgz" role="data">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file name="rolesetup.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+    <tasks:postinstallscript>
+     <tasks:paramgroup>
+      <tasks:id>setup</tasks:id>
+      <tasks:param>
+       <tasks:name>channel</tasks:name>
+       <tasks:prompt>Choose a channel to modify configuration values from</tasks:prompt>
+       <tasks:type>string</tasks:type>
+       <tasks:default>pear.php.net</tasks:default>
+      </tasks:param>
+     </tasks:paramgroup>
+     <tasks:paramgroup>
+      <tasks:id>driver</tasks:id>
+      <tasks:instructions>In order to set up the database, please choose a database driver.
+This should be a MDB2-compatible driver name, such as mysql, mysqli,
+Pgsql, oci8, etc.</tasks:instructions>
+      <tasks:param>
+       <tasks:name>driver</tasks:name>
+       <tasks:prompt>Database driver?</tasks:prompt>
+       <tasks:type>string</tasks:type>
+      </tasks:param>
+     </tasks:paramgroup>
+     <tasks:paramgroup>
+      <tasks:id>choosedsn</tasks:id>
+      <tasks:param>
+       <tasks:name>dsnchoice</tasks:name>
+       <tasks:prompt>%sChoose a DSN to modify, or to add a new dsn, type &quot;new&quot;.  To remove a DSN prepend with &quot;!&quot;</tasks:prompt>
+       <tasks:type>string</tasks:type>
+      </tasks:param>
+     </tasks:paramgroup>
+     <tasks:paramgroup>
+      <tasks:id>deletedsn</tasks:id>
+      <tasks:param>
+       <tasks:name>confirm</tasks:name>
+       <tasks:prompt>Really delete &quot;%s&quot; DSN? (yes to delete)</tasks:prompt>
+       <tasks:type>string</tasks:type>
+       <tasks:default>no</tasks:default>
+      </tasks:param>
+     </tasks:paramgroup>
+     <tasks:paramgroup>
+      <tasks:id>modifydsn</tasks:id>
+      <tasks:name>choosedsn::dsnchoice</tasks:name>
+      <tasks:conditiontype>!=</tasks:conditiontype>
+      <tasks:value>new</tasks:value>
+      <tasks:param>
+       <tasks:name>user</tasks:name>
+       <tasks:prompt>User name</tasks:prompt>
+       <tasks:type>string</tasks:type>
+       <tasks:default>root</tasks:default>
+      </tasks:param>
+      <tasks:param>
+       <tasks:name>password</tasks:name>
+       <tasks:prompt>Database password</tasks:prompt>
+       <tasks:type>password</tasks:type>
+      </tasks:param>
+      <tasks:param>
+       <tasks:name>host</tasks:name>
+       <tasks:prompt>Database host</tasks:prompt>
+       <tasks:type>string</tasks:type>
+       <tasks:default>localhost</tasks:default>
+      </tasks:param>
+      <tasks:param>
+       <tasks:name>database</tasks:name>
+       <tasks:prompt>Database name</tasks:prompt>
+       <tasks:type>string</tasks:type>
+      </tasks:param>
+     </tasks:paramgroup>
+     <tasks:paramgroup>
+      <tasks:id>newpackagedsn</tasks:id>
+      <tasks:param>
+       <tasks:name>package</tasks:name>
+       <tasks:prompt>Package name</tasks:prompt>
+       <tasks:type>string</tasks:type>
+      </tasks:param>
+      <tasks:param>
+       <tasks:name>user</tasks:name>
+       <tasks:prompt>User name</tasks:prompt>
+       <tasks:type>string</tasks:type>
+       <tasks:default>root</tasks:default>
+      </tasks:param>
+      <tasks:param>
+       <tasks:name>password</tasks:name>
+       <tasks:prompt>Database password</tasks:prompt>
+       <tasks:type>password</tasks:type>
+      </tasks:param>
+      <tasks:param>
+       <tasks:name>host</tasks:name>
+       <tasks:prompt>Database host</tasks:prompt>
+       <tasks:type>string</tasks:type>
+       <tasks:default>localhost</tasks:default>
+      </tasks:param>
+      <tasks:param>
+       <tasks:name>database</tasks:name>
+       <tasks:prompt>Database name</tasks:prompt>
+       <tasks:type>string</tasks:type>
+      </tasks:param>
+     </tasks:paramgroup>
+     <tasks:paramgroup>
+      <tasks:id>newdefaultdsn</tasks:id>
+      <tasks:param>
+       <tasks:name>user</tasks:name>
+       <tasks:prompt>User name</tasks:prompt>
+       <tasks:type>string</tasks:type>
+       <tasks:default>root</tasks:default>
+      </tasks:param>
+      <tasks:param>
+       <tasks:name>password</tasks:name>
+       <tasks:prompt>Database password</tasks:prompt>
+       <tasks:type>password</tasks:type>
+      </tasks:param>
+      <tasks:param>
+       <tasks:name>host</tasks:name>
+       <tasks:prompt>Database host</tasks:prompt>
+       <tasks:type>string</tasks:type>
+       <tasks:default>localhost</tasks:default>
+      </tasks:param>
+      <tasks:param>
+       <tasks:name>database</tasks:name>
+       <tasks:prompt>Database name</tasks:prompt>
+       <tasks:type>string</tasks:type>
+      </tasks:param>
+     </tasks:paramgroup>
+    </tasks:postinstallscript>
+   </file>
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.2.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.3</min>
+   </pearinstaller>
+   <package>
+    <name>PEAR</name>
+    <channel>pear.php.net</channel>
+    <min>1.4.3</min>
+   </package>
+   <package>
+    <name>MDB2_Schema</name>
+    <channel>pear.php.net</channel>
+    <min>0.3.0</min>
+   </package>
+   <package>
+    <name>PEAR_Installer_Role_Chiaramdb2schema</name>
+    <channel>pear.chiaraquartet.net</channel>
+    <min>0.1.0</min>
+   </package>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>0.1.0</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-10-30</date>
+   <license>BSD license</license>
+   <notes>initial release</notes>
+  </release>
+ </changelog>
+</package>

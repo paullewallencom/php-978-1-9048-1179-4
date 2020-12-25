@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window title="Simple XUL"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <tabbox height="500">
+    <tabs>
+      <tab label="Labels" />
+      <tab label="Misc" />
+    </tabs>
+    <tabpanels>
+      <tabpanel label="Labels">
+        <tree flex="1" height="200">
+          <treecols>
+            <treecol flex="1" id="id" label="Id" primary="true" />
+            <treecol flex="1" id="name" label="Name" />
+            <treecol flex="1" id="email" label="E-Mail" />
+          </treecols>
+          <treechildren>
+            <treeitem container="true">
+              <treerow>
+                <treecell label="SUN" />
+                <treecell label="Sun Records" />
+                <treecell label="info@sun-records.com" />
+              </treerow>
+              <treechildren>
+                <treeitem>
+                  <treerow>
+                    <treecell label="elvis" />
+                    <treecell label="Elvis Presley" />
+                    <treecell label="elvis@graceland.com" />
+                  </treerow>
+                </treeitem>
+                <treeitem>
+                  <treerow>
+                    <treecell label="carl" />
+                    <treecell label="Carl Perkns" />
+                    <treecell label="carl@sun-records.com" />
+                  </treerow>
+                </treeitem>
+              </treechildren>
+            </treeitem>
+            <treeitem>
+              <treerow>
+                <treecell label="SONY" />
+                <treecell label="Sony Records" />
+                <treecell label="info@sony.com" />
+              </treerow>
+            </treeitem>
+          </treechildren>
+        </tree>
+      </tabpanel>
+      <tabpanel label="Misc">
+        <description>Place any content here.</description>
+      </tabpanel>
+    </tabpanels>
+  </tabbox>
+</window>

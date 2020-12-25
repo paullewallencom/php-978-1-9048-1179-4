@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0" packagerversion="1.4.3">
+ <name>PEAR_Installer_Role_Chiaramdb2schema</name>
+ <summary>Provides the chiaramdb2schema file role for managing databases on installation</summary>
+ <description>PEAR_Installer_Role_Chiaramdb2schema provides the chiaramdb2schema file role
+to specify that a file is a MDB2_Schema-based database schema file.
+
+This role works in conjunction with the PEAR_Task_Chiara_Managedb file role
+(package PEAR_Task_Chiara_Managedb) to create databases used by
+a package on installation, and to upgrade the database structure
+automatically on upgrade.  To do this, it uses MDB2_Schema&apos;s
+updateDatabase() functionality.
+ </description>
+ <maintainers>
+  <maintainer>
+   <user>cellog</user>
+   <name>Greg Beaver</name>
+   <email>cellog@php.net</email>
+   <role>lead</role>
+  </maintainer>
+  </maintainers>
+ <release>
+  <version>0.1.0</version>
+  <date>2005-10-30</date>
+  <license>BSD license</license>
+  <state>alpha</state>
+  <notes>initial release
+  </notes>
+  <deps>
+   <dep type="php" rel="ge" version="4.2.0" optional="no"/>
+   <dep type="pkg" rel="ge" version="1.4.0" optional="no">PEAR</dep>
+   <dep type="pkg" rel="ge" version="0.3.0" optional="no">MDB2_Schema</dep>
+  </deps>
+  <filelist>
+   <dir name="/" baseinstalldir="PEAR/Installer/Role">
+    <file role="php" name="Chiaramdb2schema.php"/>
+    <file role="data" name="PEAR_Installer_Role_Chiaramdb2schema-0.1.0.tgz"/>
+   </dir> <!-- / -->
+  </filelist>
+ </release>
+ <changelog>
+   <release>
+    <version>0.1.0</version>
+    <date>2005-10-30</date>
+    <license>BSD license</license>
+    <state>alpha</state>
+    <notes>initial release
+    </notes>
+   </release>
+ </changelog>
+</package>

@@ -1,0 +1,482 @@
+
+Table Format
+<table>
+<tr>
+<th>Header One</th>
+<th>Header Two</th>
+<th>Header Three</th>
+</tr>
+<tr>
+<td>Cell Four</td>
+<td>Cell Five</td>
+<td>Cell Six</td>
+</tr>
+</table>
+
+include_once 'HTML/Table.php';
+$table = new HTML_Table();
+$table->addRow(array("one", "two", "three"), null, "th");
+$table->addRow(array("one", "two", "three"));
+echo $table->toHtml();
+
+
+Using HTML_Table to Create a Simple
+Calendar
+
+include_once 'HTML/Table.php';
+include_once 'Calendar/Month/Weekdays.php';
+$table = new HTML_Table();
+$Month = new Calendar_Month_Weekdays(date('Y'), date('n'));
+$Month->build();
+while ($Day = $Month->fetch())
+{
+if ($Day->isFirst())
+{
+if (is_array($week))
+{
+$table->addRow($week);
+}
+$week = array();
+}
+$week[] = $Day->isEmpty() ? "" : $Day->thisDay();
+}
+$table->addRow($week);
+$table->setColAttributes(0, 'bgcolor="#CCCCCC"');
+$table->setColAttributes(6, 'bgcolor="#CCCCff"');
+$table->updateAllAttributes('align="center"');
+echo $table->toHTML();
+
+require_once 'HTML/Table.php';
+require_once 'Calendar/Month/Weekdays.php';
+require_once 'Date/Holidays.php';
+$tableAttrs = array('border' => "2");
+$table = new HTML_Table($tableAttrs);
+$Germany =& Date_Holidays::factory('Germany', 2005);
+$Month = new Calendar_Month_Weekdays(2005, 12);
+$Month->build();
+$table->addRow(array('S', 'M', 'T', 'W', 'T', 'F', 'S'),
+null, "th");
+while ($Day = $Month->fetch())
+{
+if ($Day->isFirst())
+{
+$row++;
+$col = 0;
+}
+if (!$Day->isEmpty())
+{
+$table->setCellContents($row, $col, $Day->thisDay());
+$t = sprintf('%4d-%02d-%02d', $Day->thisYear(),
+$Day- >thisMonth(), $Day->thisDay());
+if ($Germany->isHoliday($t))
+{
+$table->setCellAttributes($row,$col, 'bgcolor="red"');
+}
+}
+$col++;
+}
+$table->setRowAttributes(0, 'bgcolor="#CC99FF"');
+$table->updateAllAttributes('align="center"');
+$table->setCaption("Holidays");
+echo $table->toHTML();
+
+
+Extended HTML_Table with HTML_Table_Matrix
+
+include_once 'HTML/Table/Matrix.php';
+include_once 'Services/Yahoo/Search.php';
+$table = new HTML_Table_Matrix(array('border' => "2"));
+$rows = 4;
+$cols = 4;
+$term = 'Pears';
+$search = Services_Yahoo_Search::factory("image");
+$search->setQuery($term);
+$search->setResultNumber($rows * $cols);
+$results = $search->submit();
+foreach($results as $image)
+{
+$data[] = "<img src='{$image['Thumbnail']->Url}' />";
+}
+$table->setTableSize($rows, $cols);
+$table->setFillStart(1, 0);
+$table->setData($data);
+$table->addRow(array("Search for the term '$term'"),
+"colspan='$cols'", "th");
+$f = HTML_Table_Matrix_Filler::factory("LRTB", $table);
+$table->accept($f);
+echo $table->toHtml();
+
+Our First Spreadsheet
+
+require_once 'Spreadsheet/Excel/Writer.php';
+$workbook = new Spreadsheet_Excel_Writer();
+$worksheet =& $workbook->addWorksheet('Example 1');
+$worksheet->write(0, 0, 'Hello World!');
+$worksheet->write(0, 1, 'This is my first Excel Spreadsheet');
+$worksheet->send('example1.xls')
+$workbook->close();
+
+
+About Cells
+
+$first = 1;
+$last = 10;
+for ($i = $first; $i <= $last; $i++) {
+$worksheet1->write($i, 1, $i);
+}
+$cell1 = Spreadsheet_Excel_Writer::rowcolToCell($first, 1);
+$cell2 = Spreadsheet_Excel_Writer::rowcolToCell($last, 1);
+$worksheet1->write($last + 1, 0, "Total =");
+$worksheet1->writeFormula($last + 1, 1,
+"=SUM($cell1:$cell2)");
+
+
+Adding some Formatting
+
+require_once 'Spreadsheet/Excel/Writer.php';
+$workbook = new Spreadsheet_Excel_Writer('example2.xls');
+$worksheet =& $workbook->addWorksheet("Example 2");
+$header =& $workbook->addFormat(array("bold" => true,
+"Color" => "white",
+"FgColor" => "12",
+"Size" => "15"));
+$worksheet->write(0, 0, 'Hello, World!', $header);
+
+
+About Colors
+require_once 'Spreadsheet/Excel/Writer.php';
+$workbook = new Spreadsheet_Excel_Writer('example2a.xls');
+$worksheet =& $workbook->addWorksheet("Colors");
+$row = 0;
+$col = 0;
+for ($i = 1; $i <= 128; $i++)
+{
+$format =& $workbook->addFormat(array("bold" => true,
+"Color" => "white",
+"FgColor" => $i));
+$worksheet->write($row, $col, '#'.$i, $format);
+$col++;
+if ($col == 7)
+{
+$col = 0;
+$row++;
+}
+}
+$workbook->close();
+
+Number Formatting$format =& $workbook->addFormat();
+$format->setNumFormat('[Blue]$0.00;[Red]($0.00)');
+$worksheet->write(2, 1, "-4201", $format);
+$worksheet->write(2, 2, "4201", $format);
+
+$format =& $workbook->addFormat();
+$format->setNumFormat('[Blue]0;[Red]0;[Green]0;@*-');
+$worksheet->write(0, 1, 10, $format);
+$worksheet->write(0, 1, -10, $format);
+$worksheet->write(0, 1, 0, $format);
+$worksheet->write(0, 1, "ten", $format);
+
+$ format =& $workbook->addFormat();
+$format->setNumFormat('0 "Dollars and" .00 "cents"');
+$worksheet->write(4, 1, 6.95, $format);
+
+$format =& $workbook->addFormat();
+$format->setNumFormat('0 ??/?? "Dollars"');
+$worksheet->write(0, 1, 42.50, $format);
+
+
+Adding Formulas
+
+require_once 'Spreadsheet/Excel/Writer.php';
+$workbook = new Spreadsheet_Excel_Writer('example3.xls');
+$worksheet =& $workbook->addWorksheet("Example 3");
+$tax =& $workbook->addFormat();
+$tax->setNumFormat('.00%');
+$price =& $workbook->addFormat();
+$price->setNumFormat('$####.00');
+$worksheet->write(0, 0, 'Tax Calculation Worksheet');
+$worksheet->write(1, 0, 'VAT:');
+$worksheet->write(1, 1, ".16", $tax);
+$worksheet->write(2, 1, 'Price');
+$worksheet->write(2, 2, "With Tax");
+$worksheet->freezePanes(array(3));
+for ($i = 3; $i < 101; $i++)
+{
+$worksheet->write($i, 0, "Item $i");
+$worksheet->write($i, 1, rand(3, 100), $price);
+$cell = Spreadsheet_Excel_Writer::rowcolToCell($i, 1);
+$worksheet->writeFormula($i, 2, "=($cell*B2)+$cell",
+$price);
+}
+$worksheet->writeFormula(102, 1, "=SUM(B4:B102,C4:C102)", $price);
+$workbook->close();
+
+
+Multiple Worksheets, Borders, and Images
+
+<?php
+require_once 'Spreadsheet/Excel/Writer.php';
+$workbook = new Spreadsheet_Excel_Writer("example4.xls");
+$worksheet =& $workbook->addWorksheet();
+$worksheet->writeNote(1, 0, "Invoice For New Customer");
+$worksheet->setRow(0, 50);
+$worksheet->insertBitmap(0, 0, "logo.bmp", 0, 0);
+$left =& $workbook->addFormat(array("Left" => 2));
+$right =& $workbook->addFormat(array("Right" => 2));
+$number =& $workbook->addFormat(array("NumFormat" =>
+'$####.00'));
+$worksheet->write(1, 1, "Client Name:");
+$worksheet->write(2, 1, "Tax:");
+$worksheet->writeNumber(2, 2, .16);
+$cart = array("Monitor" => 12,
+"Printer" => 14.4);
+$top = 4;
+foreach ($cart as $item => $price)
+{
+$worksheet->write($top, 1, $item, $number);
+$worksheet->write($top, 2, $price, $number);
+$cell = "C" . ($top + 1);
+$worksheet->writeFormula($top, 3, "=($cell*C3)+$cell",
+$number);
+$top++;
+}
+$lastrow = $top + 1;
+for ($i=1; $i <= $lastrow; $i++)
+{
+$worksheet->writeBlank($i, 0, $left);
+$worksheet->writeBlank($i, 7, $right);
+}
+$worksheet->write($lastrow, 2, "Total:");
+$worksheet->writeFormula($lastrow, 3, "=SUM(D5:D$lastrow)",
+$number);
+$workbook->close();
+
+
+DataGrids
+A Simple DataGrid
+
+require_once 'Structures/DataGrid.php';
+$data = array(array('First Name' => 'Aaron',
+'Last Name' => 'Wormus',
+'Email' => 'aaron@wormus.com'),
+array('First Name' => 'Clark',
+'Last Name' => 'Kent',
+'Email' => 'clark@kent.com'),
+array('First Name' => 'Peter',
+'Last Name' => 'Parker',
+'Email' => 'peter@parker.com'),
+array('First Name' => 'Bruce',
+'Last Name' => 'Wayne',
+'Email' => 'bruce@wayne.com')
+);
+$dg =& new Structures_DataGrid;
+$dg->bind($data);
+$dg->render();
+
+
+Using a DataSource
+
+require_once 'Structures/DataGrid.php';
+require_once 'Structures/DataGrid/DataSource.php';
+$opt = array('delimiter' => ',',
+'fields' => array(0, 1, 2),
+'labels' => array("First Name", "Last Name", "Email"),
+'generate_columns' => true);
+$data = Structures_DataGrid_DataSource::create('data.csv',
+$opt, DATAGRID_SOURCE_CSV);
+$dg =& new Structures_DataGrid();
+$dg->bindDataSource($data);
+$dg->render();
+
+Using a Renderer
+
+// Instruct the Structures_Datagrid to use the XLS renderer
+$dg =& new Structures_DataGrid(null, null, DATAGRID_RENDER_XLS);
+// Set the filename which we will be using
+$dg->renderer->setFilename('datagrid.xls');
+// Bind the data, and render the output
+$dg->bindDataSource($data);
+$dg->render();
+
+Making it Pretty
+
+$dg =& new Structures_DataGrid(2, null, DATAGRID_RENDER_TABLE);
+$dg->renderer->setTableHeaderAttributes(array('bgcolor' =>
+'#3399FF'));
+$dg->renderer->setTableOddRowAttributes(array('bgcolor' =>
+'#CCCCCC'));
+$dg->renderer->setTableEvenRowAttributes(array('bgcolor' =>
+'#EEEEEE'));
+// Define DataGrid Table Attributes
+$dg->renderer->setTableAttribute('width', '100%');
+$dg->renderer->setTableAttribute('cellspacing', '1');
+// Set sorting icons
+$dg->renderer->sortIconASC = '&uarr;';
+$dg->renderer->sortIconDESC = '&darr;';
+$dg->bind($data);
+
+Extending DataGrid
+
+require 'Structures/DataGrid.php';
+class myDataGrid extends Structures_DataGrid
+{
+function myDataGrid($limit = null, $page = 0)
+{
+parent::Structures_DataGrid($limit, $page);
+$this->renderer->setTableAttribute('width', '100%');
+// ... Enter the rest of your formatting code here ...
+$this->renderer->sortIconDESC = '&darr;';
+}
+}
+$dg =& myDataGrid();
+
+
+function getDGInstance($type)
+{
+if (class_exists($type))
+{
+$datagrid =& new $type;
+return $datagrid;
+} else
+{
+return false;
+}
+}
+$dg = getDGInstance('myDataGrid');
+// We can create another instance of DataGrid using a
+// seperate extended class like this
+$dg = getDGInstance('myDataGrid2');
+
+
+Adding Columns
+
+require_once 'Structures/DataGrid/DataSource.php';
+// Specify the Columns from the RSS we want to use
+$options = array('fields' => array('title', 'link'));
+$rss = "http://rss.slashdot.org/Slashdot/slashdot";
+$ds = Structures_DataGrid_DataSource::create($rss, $options,
+DATAGRID_SOURCE_RSS);
+// Instantiate our extended DataGrid class
+$dg =& new myDataGrid;
+// Create 2 columns
+$titleCol = new Structures_DataGrid_Column('Title', 'title');
+$funcCol = new Structures_DataGrid_Column('Function', null);
+// Attach Formatters
+$titleCol->setFormatter('printLink()');
+$funcCol->setFormatter('sendLink()');
+// Add Columns to DataGrid
+$dg->addColumn($titleCol);
+$dg->addColumn($funcCol);
+// Bind DataSet to DataGrid and render
+$dg->bindDataSource($ds);
+$dg->render();
+
+
+function printLink($params)
+{
+$data = $params['record'];
+return "<a href=\"{$data[link]}\">$data[title]</a>";
+}
+function sendLink($params)
+{
+$data = $params['record'];
+$link = urlencode($data["link"]);
+return "<a href=\"send2friend.php?url=$link\">Send Link to
+Friend</a>";
+}
+
+Generating PDF Files
+
+require_once "File/PDF.php";
+$company_name = "Wormus Consulting";
+$my_address = "123 Aaron Way, Gotham City, 12421 RQ, USA";
+// Set some initial margins
+$lm = 22;
+$rm = 22;
+$tm = 22;
+$bm = 22;
+$padding = 10;
+$pdf = File_PDF::factory();
+$pdf->open();
+// Can also be done with setMargins
+$pdf->setLeftMargin($lm + $padding);
+$pdf->setRightMargin($rm + $padding);
+$pdf->addPage();
+// Set the typeface for the title
+$pdf->setFont('Arial', 'B', '12');
+$pos = $tm + $padding;
+$pdf->setXY(10, $pos);
+// Draw the Company Name
+$pdf->cell(0, $padding, $company_name, null, 0, 'R');
+$pdf->setFont('Arial', 'B', '8');
+$pos += 10;
+$pdf->setXY(10, $pos);
+$pdf->cell(0, 0, $my_address, null, 1, 'R');
+$pos += 3;
+$pdf->setXY($lm, $pos);
+$pdf->line($lm + $padding, $pos, 210 - $rm - $lm, $pos);
+$pos += 10;
+$pdf->setXY($lm, $pos);
+$pdf->newLine();
+$pdf->write('4', "John Smith");
+$pdf->newLine();
+$pdf->write('4', "122 Peters Lane");
+$pdf->newLine();
+$pdf->write('4', "32235 City, State");
+$pdf->newLine();
+$pdf->write('4', "Country");
+$pdf->newLine();
+$pos += 20;
+$pdf->setXY($lm, $pos);
+$pdf->newLine();
+$pdf->write('4', "To whom it may Concern:");
+$pos += 6;
+$pdf->setXY($lm, $pos);
+$pdf->newLine();
+// shortened for the sake of brevity
+$text = "Lorem ipsum dolor ... porta eleifend. ";
+$pdf->MultiCell(210 -$lm -$rm - $padding *2, 3, $text, null, "J");
+$pdf->newLine(10);
+$pdf->write("10", "Best Regards,");
+$pdf->output();
+
+
+$pdf = File_PDF::factory(array('orientation' => 'P',
+'unit' => 'mm',
+'format' => 'A4'));
+
+
+Colors
+
+$pdf->setDrawColor("rgb", 0, 0, 255);
+$pdf->setFillColor("rgb", 255, 0, 0);
+
+Fonts
+
+$pdf->setFont("Arial", "B", 8);
+
+
+Cells
+
+$pdf->cell(0, $padding, $company_name, null, 0, 'R');
+
+$pdf->cell(0, $padding, $company_name, null, 0, "LR", 'R', 0,
+"http://example.com");
+
+
+Creating Headers and Footers
+
+class My_File_PDF extends File_PDF
+{
+function header()
+{
+// Select Arial bold 15
+$this->setFont('Arial', 'B', 15);
+// Move to the right
+$this->cell(80);
+// Framed title
+$this->cell(30, 10, 'Title', 1, 0, 'C');
+// Line break
+$this->newLine(20);
+}
+}

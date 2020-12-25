@@ -1,0 +1,8 @@
+There's a listing file for every code-section in the chapter.
+
+Requirements:
+--
+- PHP >= 5
+- latest PEAR::Date
+- latest PEAR::Date_Holidays (CVS version needed by now, PEAR-Package file included in the listings directory, I will make an official release in the next few weeks)
+- latest PEAR::Calendar

@@ -1,0 +1,45 @@
+<role version="1.0">
+ <releasetypes>php</releasetypes>
+ <releasetypes>extsrc</releasetypes>
+ <releasetypes>extbin</releasetypes>
+ <installable>1</installable>
+ <locationconfig>data_dir</locationconfig>
+ <honorsbaseinstall />
+ <unusualbaseinstall />
+ <phpfile />
+ <executable />
+ <phpextension />
+ <config_vars>
+  <chiaramdb2schema_driver>
+   <type>string</type>
+   <default />
+   <doc>MDB2 database driver used to connect to the database</doc>
+   <prompt>Database driver type.  This must be a valid MDB2 driver.
+Example drivers are mysql, mysqli, pgsql, sqlite, and so on</prompt>
+   <group>Database</group>
+  </chiaramdb2schema_driver>
+  <chiaramdb2schema_dsn>
+   <type>string</type>
+   <default />
+   <doc>PEAR::MDB2 dsn string[s] for database connection, separated by ;.
+This must be of format: [user@]host/dbname[;[Package[#schemafile]::]dsn2...]
+One default database connection must be specified, and package-specific databases
+may be specified.  The driver type and password should be excluded.  Passwords
+are set with the chiaramdb2schema_password config variable
+</doc>
+   <prompt>Database connection DSN[s] (no driver/password)</prompt>
+   <group>Database</group>
+  </chiaramdb2schema_dsn>
+  <chiaramdb2schema_password>
+   <type>string</type>
+   <default />
+   <doc>PEAR::MDB2 dsn password[s] for database connection.
+This must be of format: password[:password...]
+Each DSN in chiaramdb2schema_dsn must match with a password in this list, or
+none will be used.  To use no password, simply put another :: like ::::
+</doc>
+   <prompt>Database connection password[s]</prompt>
+   <group>Database</group>
+  </chiaramdb2schema_password>
+ </config_vars>
+</role>
